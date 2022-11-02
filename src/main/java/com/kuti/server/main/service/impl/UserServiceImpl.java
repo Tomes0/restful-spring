@@ -1,5 +1,7 @@
 package com.kuti.server.main.service.impl;
 
+import com.kuti.server.main.model.UserReadAllDto;
+import com.kuti.server.main.model.UserReadDto;
 import com.kuti.server.main.model.UserUpdateDto;
 import com.kuti.server.main.model.entity.Picture;
 import com.kuti.server.main.model.entity.Post;
@@ -9,12 +11,15 @@ import com.kuti.server.main.repository.PictureRepository;
 import com.kuti.server.main.repository.PostRepository;
 import com.kuti.server.main.repository.UserRepository;
 import com.kuti.server.main.service.UserService;
+import com.kuti.server.main.util.HashPassword;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -30,65 +35,82 @@ public class UserServiceImpl implements UserService {
     @Override
     public void create(UserSaveDto req) {
         User user = User.builder()
-                .creationDate(new java.sql.Date( new Date().getTime()))
+                .creationDate(new java.sql.Date(new Date().getTime()))
                 .userName(req.getUserName())
                 .fullName(req.getFullName())
                 .email(req.getEmail())
-                .pass(req.getPass())
+                .pass(HashPassword.GenerateHashedPassword(req.getPass() + req.getUserName()))
                 .build();
         userRepository.save(user);
     }
 
-    @Override
-    public User read(Integer id) throws Exception {
-        if(userRepository.existsById(id)){
-            return userRepository.findById(id).get();
-        }
-        else throw new Exception("User not found!");
-    }
 
     @Override
     public void update(UserUpdateDto req, int id) throws Exception {
-        if(userRepository.existsById(id)){
+        if (userRepository.existsById(id)) {
             User user = User.builder()
                     .userId(id)
                     .userName(req.getUserName())
                     .fullName(req.getFullName())
-                    .pass(req.getPass())
+                    .pass(HashPassword.GenerateHashedPassword(req.getPass() + req.getUserName()))
                     .email(req.getEmail())
                     .build();
             userRepository.save(user);
-        }else throw new Exception("User profile doesn't exist!");
+        } else throw new Exception("User profile doesn't exist!");
     }
 
     @Override
     public void delete(User req) throws Exception {
-        if(userRepository.existsById(req.getUserId()))
+        if (userRepository.existsById(req.getUserId()))
             deleteById(req.getUserId());
-        else throw new Exception("User profile doesn't exist!");
-    }
-    @Override
-    public void deleteById(Integer req) throws Exception {
-        if(userRepository.existsById(req)){
-            try{
-                for (Picture picture:userRepository.findById(req).get().getPictureList()) {
-                    pictureRepository.delete(picture);
-                }
-                for (Post post:userRepository.findById(req).get().getPostList()) {
-                    postRepository.delete(post);
-                }
-                userRepository.deleteById(req);
-            }catch(Exception e){
-                throw new RuntimeException("Error deleting pictures/posts.");
-            }
-        }
         else throw new Exception("User profile doesn't exist!");
     }
 
     @Override
-    public Iterator<User> readAll() throws Exception {
-        if(userRepository.count()!=0){
-            return userRepository.findAll().iterator();
-        }else throw new Exception("No users.");
+    public void deleteById(Integer req) throws Exception {
+        if (userRepository.existsById(req)) {
+            try {
+                for (Picture picture : userRepository.findById(req).get().getPictureList()) {
+                    pictureRepository.delete(picture);
+                }
+                for (Post post : userRepository.findById(req).get().getPostList()) {
+                    postRepository.delete(post);
+                }
+                userRepository.deleteById(req);
+            } catch (Exception e) {
+                throw new RuntimeException("Error deleting pictures/posts.");
+            }
+        } else throw new Exception("User profile doesn't exist!");
+    }
+
+    @Override
+    public Iterator<UserReadAllDto> readAll() throws Exception {
+        if (userRepository.count() != 0) {
+            List<UserReadAllDto> allUsers = new ArrayList<>();
+            for (User user : userRepository.findAll()) {
+                UserReadAllDto userRead = new UserReadAllDto(user.getEmail(), user.getFullName(), user.getCreationDate(), user.getUserName(), user.getUserId());
+                allUsers.add(userRead);
+            }
+            return allUsers.iterator();
+
+        } else throw new Exception("No users.");
+    }
+
+    @Override
+    public UserReadDto read(Integer id) throws Exception {
+        if(userRepository.existsById(id)){
+            User user = userRepository.findById(id).get();
+            UserReadDto userResponse = UserReadDto.builder()
+                    .email(user.getEmail())
+                    .fullName(user.getFullName())
+                    .userName(user.getUserName())
+                    .creationDate(user.getCreationDate())
+                    .userId(user.getUserId())
+                    .pictureList(user.getPictureList())
+                    .postList(user.getPostList())
+                    .build();
+            return userResponse;
+        }
+        else throw new Exception("User not found!");
     }
 }

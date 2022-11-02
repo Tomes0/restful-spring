@@ -36,10 +36,12 @@ public class User implements Serializable {
 
     @Column(name = "email")
     private String email;
+
     @JsonManagedReference
     @Column(name = "pictureList")
     @OneToMany(mappedBy = "ownerId")
     private List<Picture> pictureList;
+
     @JsonManagedReference
     @Column(name = "postList")
     @OneToMany(mappedBy = "ownerId", fetch = FetchType.LAZY)

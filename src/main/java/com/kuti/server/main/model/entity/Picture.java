@@ -29,7 +29,10 @@ public class Picture implements Serializable {
     private String extension;
     @JsonBackReference
     @ManyToOne
-    @JoinColumn(name = "ownerId", nullable = false)
-    private User ownerId;
+    @JoinColumn(name = "owner", nullable = false)
+    private User owner;
+
+    @Column(name = "ownerId")
+    private int ownerId;
 
 }

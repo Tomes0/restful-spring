@@ -1,5 +1,7 @@
 package com.kuti.server.main.service;
 
+import com.kuti.server.main.model.UserReadAllDto;
+import com.kuti.server.main.model.UserReadDto;
 import com.kuti.server.main.model.UserSaveDto;
 import com.kuti.server.main.model.UserUpdateDto;
 import com.kuti.server.main.model.entity.User;
@@ -31,7 +33,7 @@ public interface UserService {
      * @return User object with the details
      * @throws Exception if user not found
      */
-    User read(Integer id) throws Exception;
+    UserReadDto read(Integer id) throws Exception;
 
     /**
      * Used for updating an existing User entry.
@@ -73,5 +75,5 @@ public interface UserService {
      * @return Iterator in which you have all the users
      * @throws Exception if no users present
      */
-    Iterator<User> readAll() throws Exception;
+    Iterator<UserReadAllDto> readAll() throws Exception;
 }

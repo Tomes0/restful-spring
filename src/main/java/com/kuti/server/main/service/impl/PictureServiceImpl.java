@@ -24,12 +24,16 @@ public class PictureServiceImpl implements PictureService {
     @Override
     public void create (int id, MultipartFile multipartFile) throws Exception {
         if(userRepository.existsById(id)){
+            int ownerId = userRepository.findById(id).get().getUserId();
             User owner = userRepository.findById(id).get();
+
+
             String extension = multipartFile.getContentType().split("/")[multipartFile.getContentType().split("/").length-1];
             Picture picture = Picture.builder()
                     .extension(extension)
                     .bytea(ImageUtility.compressImage(multipartFile.getBytes()))
-                    .ownerId(owner)
+                    .ownerId(ownerId)
+                    .owner(owner)
                     .build();
             pictureRepository.save(picture);
         }else throw new Exception("User doesn't exist!");
