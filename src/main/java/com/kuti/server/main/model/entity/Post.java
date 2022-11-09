@@ -30,8 +30,14 @@ public class Post implements Serializable {
     @Column(name = "content")
     private String content;
 
+    @Column(name = "title")
+    private String title;
+
+    @Column(name = "ownerId")
+    private int ownerId;
+
     @JsonBackReference
     @ManyToOne
-    @JoinColumn(name = "ownerId", nullable = false)
-    private User ownerId;
+    @JoinColumn(name = "ownerObject", nullable = false)
+    private User ownerObject;
 }

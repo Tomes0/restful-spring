@@ -31,7 +31,7 @@ public class PictureServiceImpl implements PictureService {
                     .extension(req.getExtension())
                     .bytea(req.getPicture())
                     .ownerId(ownerId)
-                    .owner(owner)
+                    .ownerObject(owner)
                     .build();
             pictureRepository.save(picture);
         }else throw new Exception("User doesn't exist!");

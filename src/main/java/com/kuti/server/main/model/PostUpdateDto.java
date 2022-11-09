@@ -9,4 +9,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PostUpdateDto {
     private String content;
+    private String title;
 }

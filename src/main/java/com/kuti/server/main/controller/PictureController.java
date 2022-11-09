@@ -15,8 +15,7 @@ import java.util.Iterator;
 
 @RestController
 @RequiredArgsConstructor
-@CrossOrigin()
-@RequestMapping("/picture")
+@RequestMapping("/api/picture")
 public class PictureController {
 
     @Autowired

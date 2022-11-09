@@ -7,7 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -17,7 +17,7 @@ import java.util.List;
 public class UserReadDto {
     private String email;
     private String fullName;
-    private Date creationDate;
+    private LocalDateTime creationDate;
     private String userName;
     private int userId;
     private List<Post> postList;

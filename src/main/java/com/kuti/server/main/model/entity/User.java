@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -32,7 +33,7 @@ public class User implements Serializable {
     private String pass;
 
     @Column(name = "creationDate")
-    private Date creationDate;
+    private LocalDateTime creationDate;
 
     @Column(name = "email")
     private String email;
@@ -44,6 +45,6 @@ public class User implements Serializable {
 
     @JsonManagedReference
     @Column(name = "postList")
-    @OneToMany(mappedBy = "ownerId", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "ownerObject", fetch = FetchType.LAZY)
     private List<Post> postList;
 }

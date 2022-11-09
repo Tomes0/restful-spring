@@ -27,7 +27,7 @@ public class PostServiceImpl implements PostService {
     public void create(PostSaveDto req, int id) {
         User owner = userRepository.findById(id).get();
         Post post = Post.builder()
-                .ownerId(owner)
+                .ownerObject(owner)
                 .content(req.getContent())
                 .creationDate(LocalDateTime.now())
                 .lastModificationDate(LocalDateTime.now())
@@ -46,15 +46,15 @@ public class PostServiceImpl implements PostService {
     @Override
     public void update(PostUpdateDto req, int id) throws Exception {
         if(postRepository.existsById(id) &&
-                userRepository.existsById(postRepository.findById(id).get().getOwnerId().getUserId())){
+                userRepository.existsById(postRepository.findById(id).get().getOwnerObject().getUserId())){
 
-            User owner = postRepository.findById(id).get().getOwnerId();
+            User owner = postRepository.findById(id).get().getOwnerObject();
             Post post = Post.builder()
                     .lastModificationDate(LocalDateTime.now())
                     .creationDate(postRepository.findById(id).get().getCreationDate())
                     .content(req.getContent())
                     .postId(id)
-                    .ownerId(owner)
+                    .ownerObject(owner)
                     .build();
             postRepository.save(post);
         }else throw new Exception("Post/User not found!");

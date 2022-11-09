@@ -2,22 +2,21 @@ package com.kuti.server.main.service.impl;
 
 import com.kuti.server.main.model.UserReadAllDto;
 import com.kuti.server.main.model.UserReadDto;
+import com.kuti.server.main.model.UserSaveDto;
 import com.kuti.server.main.model.UserUpdateDto;
 import com.kuti.server.main.model.entity.Picture;
 import com.kuti.server.main.model.entity.Post;
 import com.kuti.server.main.model.entity.User;
-import com.kuti.server.main.model.UserSaveDto;
 import com.kuti.server.main.repository.PictureRepository;
 import com.kuti.server.main.repository.PostRepository;
 import com.kuti.server.main.repository.UserRepository;
 import com.kuti.server.main.service.UserService;
-import com.kuti.server.main.util.HashPassword;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -35,11 +34,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public void create(UserSaveDto req) {
         User user = User.builder()
-                .creationDate(new java.sql.Date(new Date().getTime()))
+                .creationDate(LocalDateTime.now())
                 .userName(req.getUserName())
                 .fullName(req.getFullName())
                 .email(req.getEmail())
-                .pass(HashPassword.GenerateHashedPassword(req.getPass() + req.getUserName()))
+                .pass(req.getPass())
                 .build();
         userRepository.save(user);
     }
@@ -52,7 +51,7 @@ public class UserServiceImpl implements UserService {
                     .userId(id)
                     .userName(req.getUserName())
                     .fullName(req.getFullName())
-                    .pass(HashPassword.GenerateHashedPassword(req.getPass() + req.getUserName()))
+                    .pass(req.getPass())
                     .email(req.getEmail())
                     .build();
             userRepository.save(user);
@@ -88,8 +87,14 @@ public class UserServiceImpl implements UserService {
         if (userRepository.count() != 0) {
             List<UserReadAllDto> allUsers = new ArrayList<>();
             for (User user : userRepository.findAll()) {
-                UserReadAllDto userRead = new UserReadAllDto(user.getEmail(), user.getFullName(), user.getCreationDate(), user.getUserName(), user.getUserId());
-                allUsers.add(userRead);
+                allUsers.add(
+                        new UserReadAllDto(
+                            user.getEmail(),
+                            user.getFullName(),
+                            user.getCreationDate(),
+                            user.getUserName(),
+                            user.getUserId())
+                );
             }
             return allUsers.iterator();
 
