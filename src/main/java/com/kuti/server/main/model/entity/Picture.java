@@ -23,7 +23,7 @@ public class Picture implements Serializable {
     private int pictureId;
 
     @Lob
-    private byte[] bytea;
+    private String bytea;
 
     @Column(name = "pictureExtension")
     private String extension;

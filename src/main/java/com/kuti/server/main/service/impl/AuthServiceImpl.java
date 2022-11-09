@@ -27,11 +27,12 @@ public class AuthServiceImpl implements AuthService {
     @SneakyThrows
     @Override
     public int register(AuthRegisterDto auth) {
-        UserSaveDto newUser = new UserSaveDto().builder()
-                .username(auth.getUsername())
+        new UserSaveDto();
+        UserSaveDto newUser = UserSaveDto.builder()
+                .userName(auth.getUsername())
                 .email(auth.getEmail())
-                .password(auth.getPassword())
-                .fullname(auth.getFullName())
+                .pass(auth.getPassword())
+                .userName(auth.getFullName())
                 .build();
         userService.create(newUser);
         return 0;
@@ -40,7 +41,6 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public UserReadDto login(AuthLoginDto auth) throws Exception {
         Iterable<User> users = userRepository.findAll();
-        AtomicBoolean correct = new AtomicBoolean(false);
         String password = auth.getPassword();
 
         for (User user : users) {

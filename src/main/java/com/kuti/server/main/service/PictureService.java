@@ -1,8 +1,9 @@
 package com.kuti.server.main.service;
 
+import com.kuti.server.main.model.PictureSaveDto;
+import com.kuti.server.main.model.PictureUpdateDto;
 import com.kuti.server.main.model.entity.Picture;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public interface PictureService {
@@ -12,9 +13,9 @@ public interface PictureService {
      * the owner of the post and appends it to their list.
      *
      * @param id
-     * @param multipartFile
+     * @param req
      */
-    void create(int id, MultipartFile multipartFile) throws Exception;
+    void create (int id, PictureSaveDto req) throws Exception;
 
     /**
      * @param req
@@ -34,10 +35,11 @@ public interface PictureService {
      * Used for updating an existing entry.
      *
      * @param id
-     * @param multipartFile
+     * @param req
      * @throws Exception if no picture found with provided id
      */
-    void update(int id, MultipartFile multipartFile) throws Exception;
+
+    void update(int id, PictureUpdateDto req) throws Exception;
 
     /**
      * Used for deleting picture.

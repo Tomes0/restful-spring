@@ -1,15 +1,15 @@
 package com.kuti.server.main.service.impl;
 
+import com.kuti.server.main.model.PictureSaveDto;
+import com.kuti.server.main.model.PictureUpdateDto;
 import com.kuti.server.main.model.entity.Picture;
 import com.kuti.server.main.model.entity.User;
 import com.kuti.server.main.repository.PictureRepository;
 import com.kuti.server.main.repository.UserRepository;
 import com.kuti.server.main.service.PictureService;
-import com.kuti.server.main.util.ImageUtility;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
@@ -22,16 +22,14 @@ public class PictureServiceImpl implements PictureService {
     private final UserRepository userRepository;
 
     @Override
-    public void create (int id, MultipartFile multipartFile) throws Exception {
+    public void create(int id, PictureSaveDto req) throws Exception {
         if(userRepository.existsById(id)){
             int ownerId = userRepository.findById(id).get().getUserId();
             User owner = userRepository.findById(id).get();
 
-
-            String extension = multipartFile.getContentType().split("/")[multipartFile.getContentType().split("/").length-1];
             Picture picture = Picture.builder()
-                    .extension(extension)
-                    .bytea(ImageUtility.compressImage(multipartFile.getBytes()))
+                    .extension(req.getExtension())
+                    .bytea(req.getPicture())
                     .ownerId(ownerId)
                     .owner(owner)
                     .build();
@@ -43,13 +41,12 @@ public class PictureServiceImpl implements PictureService {
     @Override
     public Picture read(Integer req) throws Exception {
         if(pictureRepository.existsById(req)){
-            Picture picture = Picture.builder()
-                    .bytea(ImageUtility.decompressImage (pictureRepository.findById(req).get().getBytea()))
+            return Picture.builder()
+                    .bytea(pictureRepository.findById(req).get().getBytea() )
                     .pictureId(pictureRepository.findById(req).get().getPictureId())
                     .ownerId(pictureRepository.findById(req).get().getOwnerId())
                     .extension(pictureRepository.findById(req).get().getExtension())
                     .build();
-            return picture;
         }
         else throw new Exception("Picture not found!");
     }
@@ -62,13 +59,13 @@ public class PictureServiceImpl implements PictureService {
     }
 
     @Override
-    public void update(int id, MultipartFile multipartFile) throws Exception {
+    public void update(int id, PictureUpdateDto req) throws Exception {
         if(pictureRepository.existsById(id)){
             Picture picture = Picture.builder()
-                    .bytea(ImageUtility.compressImage(multipartFile.getBytes()))
+                    .bytea(req.getPicture())
                     .pictureId(pictureRepository.findById(id).get().getPictureId())
                     .ownerId(pictureRepository.findById(id).get().getOwnerId())
-                    .extension(pictureRepository.findById(id).get().getExtension())
+                    .extension(req.getExtension())
                     .pictureId(pictureRepository.findById(id).get().getPictureId())
                     .build();
             pictureRepository.save(picture);

@@ -13,6 +13,7 @@ import java.util.Iterator;
 
 @RestController
 @RequiredArgsConstructor
+@CrossOrigin()
 @RequestMapping("/post")
 public class PostController {
     @Autowired

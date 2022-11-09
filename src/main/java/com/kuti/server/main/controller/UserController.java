@@ -14,6 +14,7 @@ import java.util.Iterator;
 
 @RestController
 @RequiredArgsConstructor
+@CrossOrigin()
 @RequestMapping("/user")
 public class UserController {
     @Autowired

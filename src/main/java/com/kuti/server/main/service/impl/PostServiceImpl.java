@@ -12,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 
 @Service
@@ -29,8 +29,8 @@ public class PostServiceImpl implements PostService {
         Post post = Post.builder()
                 .ownerId(owner)
                 .content(req.getContent())
-                .creationDate(new java.sql.Date( new Date().getTime()))
-                .lastModificationDate(new java.sql.Date( new Date().getTime()))
+                .creationDate(LocalDateTime.now())
+                .lastModificationDate(LocalDateTime.now())
                 .build();
         postRepository.save(post);
     }
@@ -48,11 +48,9 @@ public class PostServiceImpl implements PostService {
         if(postRepository.existsById(id) &&
                 userRepository.existsById(postRepository.findById(id).get().getOwnerId().getUserId())){
 
-
             User owner = postRepository.findById(id).get().getOwnerId();
-            Date creationDate = postRepository.findById(id).get().getCreationDate();
             Post post = Post.builder()
-                    .lastModificationDate(new java.sql.Date( new Date().getTime()))
+                    .lastModificationDate(LocalDateTime.now())
                     .creationDate(postRepository.findById(id).get().getCreationDate())
                     .content(req.getContent())
                     .postId(id)

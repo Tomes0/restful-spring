@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.sql.Date;
+import java.time.LocalDateTime;
 
 @Data
 @Builder
@@ -22,10 +22,10 @@ public class Post implements Serializable {
     private int postId;
 
     @Column(name = "creationDate")
-    private Date creationDate;
+    private LocalDateTime creationDate;
 
     @Column(name = "lastModificationDate")
-    private Date lastModificationDate;
+    private LocalDateTime lastModificationDate;
 
     @Column(name = "content")
     private String content;

@@ -1,5 +1,7 @@
 package com.kuti.server.main.controller;
 
+import com.kuti.server.main.model.PictureSaveDto;
+import com.kuti.server.main.model.PictureUpdateDto;
 import com.kuti.server.main.model.entity.Picture;
 import com.kuti.server.main.service.PictureService;
 import io.swagger.annotations.ApiOperation;
@@ -7,12 +9,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
+
 
 import java.util.Iterator;
 
 @RestController
 @RequiredArgsConstructor
+@CrossOrigin()
 @RequestMapping("/picture")
 public class PictureController {
 
@@ -21,8 +24,8 @@ public class PictureController {
 
     @PostMapping(value = "/save/{userId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ApiOperation(value = "Saves an entry based on it's id.")
-    public void createPicture(@PathVariable("userId") int userId, @RequestPart MultipartFile multipartFile) throws Exception {
-        picService.create(userId, multipartFile);
+    public void createPicture(@PathVariable("userId") int userId, @RequestBody PictureSaveDto req) throws Exception {
+        picService.create(userId, req);
     }
 
     @GetMapping("/get/{pictureId}")
@@ -39,8 +42,8 @@ public class PictureController {
 
     @PutMapping("/update/{pictureId}")
     @ApiOperation(value = "Updates an existing entry.")
-    public void updatePicture(@PathVariable("pictureId") int pictureId, @RequestPart MultipartFile multipartFile) throws Exception {
-        picService.update(pictureId, multipartFile);
+    public void updatePicture(@PathVariable("pictureId") int pictureId, @RequestPart PictureUpdateDto req) throws Exception {
+        picService.update(pictureId, req);
     }
 
 
