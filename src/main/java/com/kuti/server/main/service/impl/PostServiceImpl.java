@@ -1,6 +1,7 @@
 package com.kuti.server.main.service.impl;
 
 
+import com.kuti.server.main.model.PostReadDto;
 import com.kuti.server.main.model.PostSaveDto;
 import com.kuti.server.main.model.PostUpdateDto;
 import com.kuti.server.main.model.entity.Post;
@@ -26,13 +27,15 @@ public class PostServiceImpl implements PostService {
     @Override
     public void create(PostSaveDto req, int id) {
         User owner = userRepository.findById(id).get();
-        Post post = Post.builder()
-                .ownerObject(owner)
+        Post newPost = Post.builder()
+                .title(req.getTitle())
                 .content(req.getContent())
                 .creationDate(LocalDateTime.now())
                 .lastModificationDate(LocalDateTime.now())
+                .ownerId(owner.getUserId())
+                .ownerObject(owner)
                 .build();
-        postRepository.save(post);
+        postRepository.save(newPost);
     }
 
     @Override
