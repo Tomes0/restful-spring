@@ -1,5 +1,6 @@
 package com.kuti.server.main.controller;
 
+import com.kuti.server.main.model.PostReadDto;
 import com.kuti.server.main.model.PostSaveDto;
 import com.kuti.server.main.model.PostUpdateDto;
 import com.kuti.server.main.model.entity.Post;
@@ -26,14 +27,14 @@ public class PostController {
 
     @GetMapping("/get/{postId}")
     @ApiOperation(value = "Gets an entry based on it's id.")
-    public Post readPost(@PathVariable("postId") int postId) throws Exception {
+    public PostReadDto readPost(@PathVariable("postId") int postId) throws Exception {
         return postService.read(postId);
     }
 
     @GetMapping("/get-all")
     @ApiOperation(value = "Gets all entries from database.")
-    public Iterator<Post> readAllPost()throws Exception{
-        return postService.readAll().iterator();
+    public Iterator<PostReadDto> readAllPost()throws Exception{
+        return postService.readAll();
     }
 
     @PutMapping("/update/{postId}")

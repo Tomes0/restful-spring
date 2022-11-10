@@ -14,6 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 
 @Service
@@ -39,9 +42,17 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Post read(Integer req) throws Exception {
+    public PostReadDto read(Integer req) throws Exception {
         if(postRepository.existsById(req)){
-            return postRepository.findById(req).get();
+            Post post = postRepository.findById(req).get();
+            return new PostReadDto(
+                    post.getPostId(),
+                    post.getTitle(),
+                    post.getContent(),
+                    post.getCreationDate(),
+                    post.getLastModificationDate(),
+                    post.getOwnerId(),
+                    post.getOwnerObject());
         }else throw new Exception("Post not found!");
 
     }
@@ -78,9 +89,20 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Iterable<Post> readAll() throws Exception {
+    public Iterator<PostReadDto> readAll() throws Exception {
+        List<PostReadDto> posts = new ArrayList<>();
         if(postRepository.count()!=0){
-            return postRepository.findAll();
+            for (Post post: postRepository.findAll()) {
+                posts.add(new PostReadDto(
+                            post.getPostId(),
+                            post.getTitle(),
+                            post.getContent(),
+                            post.getCreationDate(),
+                            post.getLastModificationDate(),
+                            post.getOwnerId(),
+                            post.getOwnerObject()));
+            }
+            return posts.iterator();
         }else throw new Exception("No posts.");
     }
 }

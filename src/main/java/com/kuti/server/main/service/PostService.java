@@ -1,9 +1,12 @@
 package com.kuti.server.main.service;
 
+import com.kuti.server.main.model.PostReadDto;
 import com.kuti.server.main.model.PostSaveDto;
 import com.kuti.server.main.model.PostUpdateDto;
 import com.kuti.server.main.model.entity.Post;
 import org.springframework.stereotype.Service;
+
+import java.util.Iterator;
 
 @Service
 public interface PostService {
@@ -30,7 +33,7 @@ public interface PostService {
      * @return Post object with the details
      * @throws Exception if the post is not found
      */
-    Post read(Integer req) throws Exception;
+    PostReadDto read(Integer req) throws Exception;
 
     /**
      * Used for updating content of post. It
@@ -63,8 +66,9 @@ public interface PostService {
 
     /**
      * Used for getting all the posts
+     *
      * @return Iterator in which you have all the posts
      * @throws Exception if there are no posts
      */
-    Iterable<Post> readAll()throws Exception;
+    Iterator<PostReadDto> readAll()throws Exception;
 }
