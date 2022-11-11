@@ -43,7 +43,7 @@ public class PostController {
         postService.update(post,postId);
     }
 
-    @DeleteMapping("/delete-by-id/{postId}")
+    @DeleteMapping("/delete/{postId}")
     @ApiOperation(value = "Deletes entry based on its id.")
     public void deletePost(@PathVariable("postId") int postId) throws Exception {
         postService.deleteById(postId);

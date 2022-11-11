@@ -29,7 +29,7 @@ public class PictureServiceImpl implements PictureService {
 
             Picture picture = Picture.builder()
                     .extension(req.getExtension())
-                    .bytea(req.getPicture())
+                    .bytea(req.getBytea())
                     .ownerId(ownerId)
                     .ownerObject(owner)
                     .build();

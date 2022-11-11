@@ -21,8 +21,8 @@ public class UserController {
 
     @PostMapping("/save")
     @ApiOperation(value = "Adds new entry to database.")
-    public void createUser(@RequestBody UserSaveDto userSaveDto) {
-        userService.create(userSaveDto);
+    public void createUser(@RequestBody UserSaveDto req) {
+        userService.create(req);
     }
 
     @GetMapping("/get/{userId}")

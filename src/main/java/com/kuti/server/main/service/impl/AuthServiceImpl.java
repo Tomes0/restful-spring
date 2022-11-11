@@ -27,12 +27,11 @@ public class AuthServiceImpl implements AuthService {
     @SneakyThrows
     @Override
     public int register(AuthRegisterDto auth) {
-        new UserSaveDto();
         UserSaveDto newUser = UserSaveDto.builder()
-                .userName(auth.getUsername())
+                .userName(auth.getUserName())
                 .email(auth.getEmail())
                 .pass(auth.getPassword())
-                .userName(auth.getFullName())
+                .fullName(auth.getFullName())
                 .build();
         userService.create(newUser);
         return 0;

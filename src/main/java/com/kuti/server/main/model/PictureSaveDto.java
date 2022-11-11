@@ -8,7 +8,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PictureSaveDto {
-    private String picture;
+
+    private String bytea;
     private String extension;
 
 }

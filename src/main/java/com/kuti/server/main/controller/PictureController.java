@@ -21,7 +21,7 @@ public class PictureController {
     @Autowired
     final public PictureService picService;
 
-    @PostMapping(value = "/save/{userId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "/save/{userId}")
     @ApiOperation(value = "Saves an entry based on it's id.")
     public void createPicture(@PathVariable("userId") int userId, @RequestBody PictureSaveDto req) throws Exception {
         picService.create(userId, req);
