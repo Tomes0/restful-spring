@@ -24,11 +24,10 @@ public class PictureServiceImpl implements PictureService {
     @Override
     public void create(int id, PictureSaveDto req) throws Exception {
         if(userRepository.existsById(id)){
-            int ownerId = userRepository.findById(id).get().getUserId();
             User owner = userRepository.findById(id).get();
+            int ownerId = owner.getUserId();
 
             Picture picture = Picture.builder()
-                    .extension(req.getExtension())
                     .bytea(req.getBytea())
                     .ownerId(ownerId)
                     .ownerObject(owner)
@@ -41,11 +40,11 @@ public class PictureServiceImpl implements PictureService {
     @Override
     public Picture read(Integer req) throws Exception {
         if(pictureRepository.existsById(req)){
+            Picture picture = pictureRepository.findById(req).get();
             return Picture.builder()
-                    .bytea(pictureRepository.findById(req).get().getBytea() )
-                    .pictureId(pictureRepository.findById(req).get().getPictureId())
-                    .ownerId(pictureRepository.findById(req).get().getOwnerId())
-                    .extension(pictureRepository.findById(req).get().getExtension())
+                    .bytea(picture.getBytea())
+                    .pictureId(picture.getPictureId())
+                    .ownerId(picture.getOwnerId())
                     .build();
         }
         else throw new Exception("Picture not found!");
@@ -61,14 +60,11 @@ public class PictureServiceImpl implements PictureService {
     @Override
     public void update(int id, PictureUpdateDto req) throws Exception {
         if(pictureRepository.existsById(id)){
-            Picture picture = Picture.builder()
-                    .bytea(req.getPicture())
-                    .pictureId(pictureRepository.findById(id).get().getPictureId())
-                    .ownerId(pictureRepository.findById(id).get().getOwnerId())
-                    .extension(req.getExtension())
-                    .pictureId(pictureRepository.findById(id).get().getPictureId())
-                    .build();
-            pictureRepository.save(picture);
+            Picture origPicture = pictureRepository.findById(id).get();
+
+            origPicture.setBytea(req.getBytea());
+
+            pictureRepository.save(origPicture);
         }
         else throw new Exception("Picture not found!");
     }

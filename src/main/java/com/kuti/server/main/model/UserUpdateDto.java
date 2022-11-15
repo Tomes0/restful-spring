@@ -10,6 +10,5 @@ import lombok.NoArgsConstructor;
 public class UserUpdateDto {
     private String email;
     private String fullName;
-    private String pass;
     private String userName;
 }

@@ -1,9 +1,6 @@
 package com.kuti.server.main.controller;
 
-import com.kuti.server.main.model.UserReadAllDto;
-import com.kuti.server.main.model.UserReadDto;
-import com.kuti.server.main.model.UserSaveDto;
-import com.kuti.server.main.model.UserUpdateDto;
+import com.kuti.server.main.model.*;
 import com.kuti.server.main.service.UserService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -39,13 +36,32 @@ public class UserController {
 
     @PutMapping("/update/{userId}")
     @ApiOperation(value = "Updates an existing User entry.")
-    public void updateUser(@PathVariable("userId") int userId, @RequestBody UserUpdateDto user) throws Exception {
+    public void update(@PathVariable("userId") int userId, @RequestBody UserUpdateDto user) throws Exception {
         userService.update(user, userId);
     }
+    @PostMapping("/profilePicture/{userId}")
+    @ApiOperation(value = "Create a profile picture.")
+    public void profilePicture(@PathVariable("userId") int userId, @RequestBody UserProfilePictureDto req){
+        System.out.println(req.getBytea());
+        userService.profilePicture(userId, req);
+    }
 
-    @DeleteMapping("/delete-by-id/{userId}")
+    @PutMapping("/profilePicture/{userId}/update")
+    @ApiOperation(value = "Updates a profile picture.")
+    public void profilePictureUpdate(@PathVariable("userId") int userId, @RequestBody UserProfilePictureDto req){
+        userService.profilePicture(userId, req);
+    }
+
+
+    @PutMapping("/updatePassword/{userId}")
+    @ApiOperation(value = "Updates an existing User entry.")
+    public void update(@PathVariable("userId") int userId, @RequestBody UserUpdatePasswordDto req) throws Exception {
+        userService.updatePassword(req, userId);
+    }
+
+    @DeleteMapping("/delete/{userId}")
     @ApiOperation(value = "Deletes entry based on its id.")
-    public void deleteById(@PathVariable("userId") int userId) throws Exception {
+    public void delete(@PathVariable("userId") int userId) throws Exception {
         userService.deleteById(userId);
     }
 }

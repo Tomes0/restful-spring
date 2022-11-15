@@ -22,7 +22,7 @@ public class PostController {
     @PostMapping("/save/{userId}")
     @ApiOperation(value = "Adds a new entry to database.")
     public void createPost(@PathVariable("userId") int userId,@RequestBody PostSaveDto post) {
-        postService.create(post,userId);
+        postService.create(userId, post);
     }
 
     @GetMapping("/get/{postId}")

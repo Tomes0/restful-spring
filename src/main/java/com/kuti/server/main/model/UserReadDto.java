@@ -20,6 +20,8 @@ public class UserReadDto {
     private LocalDateTime creationDate;
     private String userName;
     private int userId;
+    private String profilePicture;
+    private String password;
     private List<Post> postList;
     private List<Picture> pictureList;
 }

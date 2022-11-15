@@ -5,10 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class PictureUpdateDto {
-    private String bytea;
-    private String extension;
-
+@NoArgsConstructor
+public class UserUpdatePasswordDto {
+    private String password;
 }

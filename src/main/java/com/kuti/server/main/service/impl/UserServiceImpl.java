@@ -1,9 +1,6 @@
 package com.kuti.server.main.service.impl;
 
-import com.kuti.server.main.model.UserReadAllDto;
-import com.kuti.server.main.model.UserReadDto;
-import com.kuti.server.main.model.UserSaveDto;
-import com.kuti.server.main.model.UserUpdateDto;
+import com.kuti.server.main.model.*;
 import com.kuti.server.main.model.entity.Picture;
 import com.kuti.server.main.model.entity.Post;
 import com.kuti.server.main.model.entity.User;
@@ -33,6 +30,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void create(UserSaveDto req) {
+        for (User user: userRepository.findAll()) {
+            if(user.getEmail().equals(req.getEmail())){
+                throw new RuntimeException("Email already taken!");
+            }
+        }
         User user = User.builder()
                 .creationDate(LocalDateTime.now())
                 .userName(req.getUserName())
@@ -46,16 +48,28 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void update(UserUpdateDto req, int id) throws Exception {
-        if (userRepository.existsById(id)) {
-            User user = User.builder()
-                    .userId(id)
-                    .userName(req.getUserName())
-                    .fullName(req.getFullName())
-                    .pass(req.getPass())
-                    .email(req.getEmail())
-                    .build();
-            userRepository.save(user);
-        } else throw new Exception("User profile doesn't exist!");
+        if (!userRepository.existsById(id)) {
+            throw new Exception("User profile doesn't exist!");
+        } else {
+            for (User user: userRepository.findAll()) {
+                if(user.getEmail().equals(req.getEmail())){
+                    if(id == user.getUserId()) {
+                        continue;
+                    }
+                    else {
+                        throw new RuntimeException("Email already taken!");
+                    }
+
+                }
+            }
+            User origUser = userRepository.findById(id).get();
+
+            origUser.setUserName(req.getUserName());
+            origUser.setEmail(req.getEmail());
+            origUser.setFullName(req.getFullName());
+
+            userRepository.save(origUser);
+        }
     }
 
     @Override
@@ -102,6 +116,25 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void updatePassword(UserUpdatePasswordDto req, int userId) {
+        if(userRepository.existsById(userId)){
+            User origUser = userRepository.findById(userId).get();
+            origUser.setPass(req.getPassword());
+            userRepository.save(origUser);
+        }else throw new RuntimeException("User not found!");
+    }
+
+    @Override
+    public void profilePicture(int userId, UserProfilePictureDto req) {
+        if(userRepository.existsById(userId)){
+            User origUser = userRepository.findById(userId).get();
+            origUser.setProfilePicture(req.getBytea());
+            userRepository.save((origUser));
+
+        }else throw new RuntimeException("User not found");
+    }
+
+    @Override
     public UserReadDto read(Integer id) throws Exception {
         if(userRepository.existsById(id)){
             User user = userRepository.findById(id).get();
@@ -110,9 +143,11 @@ public class UserServiceImpl implements UserService {
                     .fullName(user.getFullName())
                     .userName(user.getUserName())
                     .creationDate(user.getCreationDate())
+                    .profilePicture(user.getProfilePicture())
                     .userId(user.getUserId())
                     .pictureList(user.getPictureList())
                     .postList(user.getPostList())
+                    .password(user.getPass())
                     .build();
             return userResponse;
         }

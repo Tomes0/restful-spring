@@ -22,7 +22,7 @@ public interface PostService {
      * @param req post to be created and appended to user
      * @param id
      */
-    void create(PostSaveDto req, int id);
+    void create( int id, PostSaveDto req);
 
     /**
      * Used for getting the details of a specific post.

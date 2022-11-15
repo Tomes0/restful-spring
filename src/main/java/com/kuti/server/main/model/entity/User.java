@@ -38,6 +38,9 @@ public class User implements Serializable {
     @Column(name = "email")
     private String email;
 
+    @Lob
+    private String profilePicture;
+
     @JsonManagedReference
     @Column(name = "pictureList")
     @OneToMany(mappedBy = "ownerId")

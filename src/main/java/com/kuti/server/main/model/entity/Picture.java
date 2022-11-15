@@ -25,8 +25,6 @@ public class Picture implements Serializable {
     @Lob
     private String bytea;
 
-    @Column(name = "pictureExtension")
-    private String extension;
     @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "ownerObject", nullable = false)

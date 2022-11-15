@@ -46,7 +46,7 @@ public class PictureController {
     }
 
 
-    @DeleteMapping("/delete-by-id/{pictureId}")
+    @DeleteMapping("/delete/{pictureId}")
     @ApiOperation(value = "Deletes entry based on its id.")
     public void deletePictureById(@PathVariable("pictureId") int pictureId) throws Exception{
         picService.deleteById(pictureId);

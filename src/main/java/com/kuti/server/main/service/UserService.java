@@ -1,9 +1,6 @@
 package com.kuti.server.main.service;
 
-import com.kuti.server.main.model.UserReadAllDto;
-import com.kuti.server.main.model.UserReadDto;
-import com.kuti.server.main.model.UserSaveDto;
-import com.kuti.server.main.model.UserUpdateDto;
+import com.kuti.server.main.model.*;
 import com.kuti.server.main.model.entity.User;
 import org.springframework.stereotype.Service;
 
@@ -76,4 +73,19 @@ public interface UserService {
      * @throws Exception if no users present
      */
     Iterator<UserReadAllDto> readAll() throws Exception;
+
+    /**
+     * Used for updateing user password.
+     *
+     * @throws Exception if no users present
+     *
+     */
+    void updatePassword(UserUpdatePasswordDto req, int userId);
+    /**
+     * Used for updateing or uploading user profilepicture.
+     *
+     * @throws Exception if no users present
+     *
+     */
+    void profilePicture(int userId, UserProfilePictureDto req);
 }

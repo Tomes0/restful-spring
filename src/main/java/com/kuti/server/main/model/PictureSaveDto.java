@@ -10,6 +10,5 @@ import lombok.NoArgsConstructor;
 public class PictureSaveDto {
 
     private String bytea;
-    private String extension;
 
 }
